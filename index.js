@@ -27,6 +27,9 @@ const main= ()=> {
             position: "absolute",
             zIndex: 100,
         },
+        flagStyle: {
+            color: "var(--foreground)",
+        },
         bombDensity: .3,
         // debugView: true,
     });

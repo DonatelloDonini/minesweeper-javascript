@@ -127,6 +127,8 @@ class GameCell extends EventTarget{
     }
 
     #markFlag(){
+        console.log("marking flag...");
+
         this.flagElement= document.createElement("div");
         css(this.flagElement, {
             height: "100%",
@@ -137,7 +139,6 @@ class GameCell extends EventTarget{
             display: "flex",
             pointerEvents: "none",
             fontWeight: "bold",
-            color: "red",
             textAlign: "center",
             ...this.flagStyle,
         });
@@ -151,7 +152,7 @@ class GameCell extends EventTarget{
 
         this.flagElement.appendChild(flagText);
 
-        this.element.appendChild(this.flagElement);
+        this.coverElement.appendChild(this.flagElement);
         this.flagged= true;
     }
 
@@ -245,6 +246,7 @@ export default class GameBoard extends EventTarget{
         this.style= options.style ?? {};
         this.cellStyle= options.cellStyle ?? {};
         this.cellCoverStyle= options.cellCoverStyle ?? {};
+        this.flagStyle= options.flagStyle ?? {};
         this.cellCoverHoverStyle= options.cellHoverStyle ?? {};
         this.debugView= options.debugView ?? false;
         this.bombDensity= options.bombDensity ?? .3;
@@ -282,6 +284,7 @@ export default class GameBoard extends EventTarget{
                         debugView: this.debugView,
                         eventsManager: this.eventsManager,
                         coverStyle: this.cellCoverStyle,
+                        flagStyle: this.flagStyle,
                     }
                 );
 
