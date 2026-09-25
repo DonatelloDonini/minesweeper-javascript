@@ -96,8 +96,9 @@ const main= ()=> {
             border: "1px solid black",
             borderCollapse: "collapse",
             // Same side for width and height: the largest square fitting both the screen width
-            // and the height left below the header and score, never smaller than 200px
-            "--board-side": "max(200px, min(90vw, calc(100dvh - 12rem)))",
+            // and the height left once the header and score (above) and the replay button (below) are placed,
+            // never smaller than 200px
+            "--board-side": "max(200px, min(90vw, calc(100dvh - 16rem)))",
             width: "var(--board-side)",
             height: "var(--board-side)",
             fontSize: "calc(var(--board-side) / var(--columns) * .5)",

@@ -19,11 +19,13 @@ export default class ModalMessage{
 
     #init(){
         this.#DOMElement= document.createElement("div");
+        // Never bigger than the mask: long messages wrap and scroll inside the panel
         css(this.#DOMElement, {
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            boxSizing: "border-box",
+            maxWidth: "100%",
+            maxHeight: "100%",
+            overflowY: "auto",
+            overflowWrap: "anywhere",
             backgroundColor: "black",
             color: "white",
             padding: ".5rem 1rem",
@@ -47,12 +49,15 @@ export default class ModalMessage{
         css(this.#maskElement, {
             backdropFilter: "blur(3px)",
             backgroundColor: "#00000078",
-            position: "absolute",
-            height: "100vh",
-            width: "100vw",
-            top: 0,
-            left: 0,
+            // Fixed to the viewport so it stays visible when the page is scrolled
+            position: "fixed",
+            inset: 0,
             zIndex: 100,
+            boxSizing: "border-box",
+            padding: "1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             ...this.maskStyle,
         });
 
