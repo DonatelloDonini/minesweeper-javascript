@@ -11,6 +11,9 @@ class GameCell extends EventTarget{
         this.hasBomb= hasBomb;
         this.style= options.style ?? {};
         this.onHoverStyle= options.onHoverStyle ?? {};
+        this.flagStyle= options.flagStyle ?? {};
+        this.bombStyle= options.bombStyle ?? {};
+        this.coverStyle= options.coverStyle ?? {};
         this.debugView= options.debugView ?? false;
         this.eventsManager= options.eventsManager;
         this.coveredUp= false;
@@ -27,23 +30,24 @@ class GameCell extends EventTarget{
         this.element= document.createElement("td");
 
         css(this.element, {
-            ...this.style,
             position: "relative",
+            ...this.style,
         });
     }
 
     get DOMElement(){
-        if (this.debugView && this.hasBomb){
-            const bombDebugViewElement= document.createElement("div");
-            css(bombDebugViewElement, {
+        if (this.hasBomb){
+            const bombElement= document.createElement("div");
+            css(bombElement, {
                 backgroundColor: "black",
                 borderRadius: "100%",
                 height: "40%",
                 width: "40%",
                 margin: "auto",
+                ...this.bombStyle,
             });
 
-            this.element.appendChild(bombDebugViewElement);
+            this.element.appendChild(bombElement);
         }
 
         return this.element;
@@ -92,6 +96,7 @@ class GameCell extends EventTarget{
             margin: 0,
             backgroundColor: "darkgray",
             position: "absolute",
+            ...this.coverStyle,
         };
         css(this.coverElement, coverElementStyle);
         this.element.appendChild(this.coverElement);
@@ -131,17 +136,17 @@ class GameCell extends EventTarget{
             left: 0,
             display: "flex",
             pointerEvents: "none",
+            fontWeight: "bold",
+            color: "red",
+            textAlign: "center",
+            ...this.flagStyle,
         });
 
         const flagText= document.createElement("p");
         flagText.innerText= "F";
         css(flagText, {
-            textAlign: "center",
-            color: "red",
             margin: "auto",
             width: "100%",
-            color: "red",
-            fontWeight: "bold",
         });
 
         this.flagElement.appendChild(flagText);
@@ -247,6 +252,7 @@ export default class GameBoard extends EventTarget{
     }
 
     /**
+     * Returns the usable DOM element complete with all its functinoalities
      * @returns {HTMLElement}
      */
     get DOMElement(){
@@ -345,7 +351,9 @@ export default class GameBoard extends EventTarget{
         else{
             this.#DOMElement= document.createElement("table");
         }
-        css(this.#DOMElement, this.style);
+        css(this.#DOMElement, {
+            ...this.style,
+        });
 
         for (let y=0; y<this.height; y++){
             const row= document.createElement("tr");
@@ -361,6 +369,11 @@ export default class GameBoard extends EventTarget{
         queueMicrotask(() => this.#checkForVictory());
     }
 
+    /**
+     * Checks for the status of victory.\
+     * If the game is in a current status of victory, the flag `this.victoryStatus` gets set to `true`.\
+     * Also, if the game is in the current status of victory, it emits the VICTORY and GAME_ENDED events.
+     */
     #checkForVictory(){
         if (this.#points=== this.#cellsToUncover){
             // Stopping the game from accepting interaction
@@ -422,6 +435,9 @@ export default class GameBoard extends EventTarget{
         this.gameOverCallbacks.push(callable);
     }
 
+    /**
+     * @returns {number}
+     */
     get points(){
         return this.#points;
     }
@@ -437,6 +453,11 @@ export default class GameBoard extends EventTarget{
         this.onVictoryCallbacks.push(callback);
     }
 
+    /**
+     * Generates a new level.
+     *
+     * @returns {void}
+     */
     reset(){
         this.#init();
     }

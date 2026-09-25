@@ -9,7 +9,6 @@ export default class ScoreBoard{
 
     constructor(score, options= {}){
         this.#score= score;
-        // this.#score= 10;
         this.style= options.style ?? {};
         this.numbersStyle= options.numbersStyle ?? {};
         this.debug= options.debug ?? false;

@@ -25,7 +25,7 @@ const main= ()=> {
             zIndex: 100,
         },
         bombDensity: .1,
-        debugView: true,
+        // debugView: true,
     });
 
     const scoreBoard= new ScoreBoard(gameBoard.points, {
