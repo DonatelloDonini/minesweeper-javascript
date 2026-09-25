@@ -52,6 +52,7 @@ export default class ModalMessage{
             width: "100vw",
             top: 0,
             left: 0,
+            zIndex: 100,
             ...this.maskStyle,
         });
 

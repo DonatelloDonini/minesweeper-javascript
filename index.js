@@ -2,29 +2,32 @@ import GameBoard from "./GameBoard.js";
 import ModalMessage from "./ModalMessage.js";
 import ScoreBoard from "./ScoreBoard.js";
 import { css } from "./utils.js";
+import { applyRandomPalette } from "./Palette.js";
 
 const main= ()=> {
     const gameBoard= new GameBoard(10, 10, {
         style: {
             border: "1px solid black",
             borderCollapse: "collapse",
+            margin: "0 auto",
+            borderColor: "var(--shadow)"
         },
         cellStyle: {
             height: "1cm",
             width: "1cm",
-            backgroundColor: "lightgray",
+            backgroundColor: "var(--containers)",
         },
         cellHoverStyle: {
-            backgroundColor: "gray",
+            backgroundColor: "var(--detail)",
         },
-        coverStyle: {
+        cellCoverStyle: {
             inset: 0,
             margin: 0,
-            backgroundColor: "darkgray",
+            backgroundColor: "var(--shadow)",
             position: "absolute",
             zIndex: 100,
         },
-        bombDensity: .1,
+        bombDensity: .3,
         // debugView: true,
     });
 
@@ -32,23 +35,35 @@ const main= ()=> {
         style: {
             margin: ".5rem 0",
         },
+        numbersStyle: {
+            color: "var(--foreground)",
+            backgroundColor: "var(--containers)",
+        }
+
         // debug: true,
     });
 
     gameBoard.addEventListener(GameBoard.EVENTS.DIG, (event)=> {
-        console.log(event.detail);
         if (event.detail.cellType=== GameBoard.CELL_TYPES.DIRT){
             scoreBoard.score= gameBoard.points;
         }
     });
 
     gameBoard.addEventListener(GameBoard.EVENTS.VICTORY, (event)=> {
-        const victoryMessageModal= new ModalMessage("VICTORY", {});
+        const victoryMessageModal= new ModalMessage("VICTORY", {
+            style: {
+                backgroundColor: "var(--containers)",
+            }
+        });
         victoryMessageModal.show();
     });
 
     gameBoard.addEventListener(GameBoard.EVENTS.GAME_OVER, (event)=> {
-        const victoryMessageModal= new ModalMessage("GAME OVER");
+        const victoryMessageModal= new ModalMessage("GAME OVER", {
+            style: {
+                backgroundColor: "var(--containers)",
+            }
+        });
         victoryMessageModal.show();
     });
 
@@ -59,7 +74,6 @@ const main= ()=> {
         // const icon=
 
         css(replayButton, {
-            backgroundColor: "black",
             padding: ".5rem 1rem",
             borderRadius: ".2rem",
             color: "white",
@@ -67,6 +81,8 @@ const main= ()=> {
             width: "fit-content",
             margin: "1rem auto",
             cursor: "pointer",
+            backgroundColor: "var(--containers)",
+            color: "var(--foreground)",
         });
 
         replayButton.addEventListener("click", ()=> {
@@ -85,7 +101,9 @@ const main= ()=> {
             display: "flex",
             gap: ".5rem",
             alignItems: "center",
+            marginLeft: "32px",
         });
+
 
         const scoreBoardContainerText= document.createElement("p");
         scoreBoardContainerText.innerText= "Score: ";
@@ -100,5 +118,6 @@ const main= ()=> {
 
 
 document.addEventListener("DOMContentLoaded", ()=> {
+    applyRandomPalette();
     main();
 });

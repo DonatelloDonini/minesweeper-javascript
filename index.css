@@ -1,3 +1,17 @@
-/* body{
-    font-family: consolas;
+/* :root{
+    --background: #5D5F71;
+    --shadow: #DABECA;
+    --containers: #AD8A64;
+    --foreground: #E3D8F1;
+    --detail: #BF8B85;
 } */
+
+body{
+    font-family: consolas;
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+#page-header{
+    text-align: center;
+}

@@ -244,7 +244,8 @@ export default class GameBoard extends EventTarget{
         // Managing options
         this.style= options.style ?? {};
         this.cellStyle= options.cellStyle ?? {};
-        this.cellHoverStyle= options.cellHoverStyle ?? {};
+        this.cellCoverStyle= options.cellCoverStyle ?? {};
+        this.cellCoverHoverStyle= options.cellHoverStyle ?? {};
         this.debugView= options.debugView ?? false;
         this.bombDensity= options.bombDensity ?? .3;
 
@@ -277,9 +278,10 @@ export default class GameBoard extends EventTarget{
                     hasBomb,
                     {
                         style: this.cellStyle,
-                        onHoverStyle: this.cellHoverStyle,
+                        onHoverStyle: this.cellCoverHoverStyle,
                         debugView: this.debugView,
                         eventsManager: this.eventsManager,
+                        coverStyle: this.cellCoverStyle,
                     }
                 );
 
