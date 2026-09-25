@@ -55,8 +55,43 @@ const FIELD_SIZES= [
     { label: "Hard (20x20)", value: 20 },
 ];
 
+/**
+ * localStorage key holding the field size selected by the user.
+ */
+const FIELD_SIZE_STORAGE_KEY= "minesweeper-field-size";
+
+/**
+ * Reads the field size stored in the browser.
+ *
+ * @returns {number} The stored size, or the easy one when nothing valid is stored or the storage is unavailable.
+ */
+const loadFieldSize= ()=> {
+    try {
+        const storedSize= Number(localStorage.getItem(FIELD_SIZE_STORAGE_KEY));
+        if (FIELD_SIZES.some(size=> size.value === storedSize)) return storedSize;
+    }
+    catch {}
+
+    return FIELD_SIZES[0].value;
+};
+
+/**
+ * Stores the field size in the browser, silently doing nothing when the storage is unavailable.
+ *
+ * @param {number} size The field size to store.
+ *
+ * @returns {void}
+ */
+const saveFieldSize= (size)=> {
+    try {
+        localStorage.setItem(FIELD_SIZE_STORAGE_KEY, String(size));
+    }
+    catch {}
+};
+
 const main= ()=> {
-    const gameBoard= new GameBoard(FIELD_SIZES[0].value, FIELD_SIZES[0].value, {
+    const fieldSize= loadFieldSize();
+    const gameBoard= new GameBoard(fieldSize, fieldSize, {
         style: {
             border: "1px solid black",
             borderCollapse: "collapse",
@@ -202,6 +237,7 @@ const main= ()=> {
             onChange: (size)=> {
                 replayButton?.remove();
                 gameBoard.resize(size, size);
+                saveFieldSize(size);
                 scoreBoard.score= gameBoard.points;
             },
         },
