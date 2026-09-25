@@ -1,6 +1,7 @@
 import GameBoard from "./GameBoard.js";
 import ModalMessage from "./ModalMessage.js";
 import ScoreBoard from "./ScoreBoard.js";
+import RulesButton from "./RulesButton.js";
 import { css } from "./utils.js";
 import { applyRandomPalette } from "./Palette.js";
 
@@ -111,6 +112,23 @@ const main= ()=> {
         scoreBoardContainer.appendChild(scoreBoard.DOMElement);
     }
 
+    const rulesButton= new RulesButton({
+        style: {
+            border: "2px solid var(--shadow)",
+            backgroundColor: "var(--containers)",
+            color: "var(--foreground)",
+        },
+        panelStyle: {
+            backgroundColor: "var(--background)",
+            color: "var(--foreground)",
+            border: "2px solid var(--shadow)",
+        },
+        sectionTitleStyle: {
+            borderBottom: "2px solid var(--shadow)",
+        },
+    });
+
+    document.body.appendChild(rulesButton.DOMElement);
     document.body.appendChild(scoreBoardContainer);
     document.body.appendChild(gameBoard.DOMElement);
 };
