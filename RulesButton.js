@@ -1,46 +1,42 @@
 import { css } from "./utils.js";
 
-const RULES= [
-    {
-        title: "Goal",
-        items: [
-            "Dig up every cell that does not hide a bomb.",
-        ],
-    },
-    {
-        title: "Controls",
-        items: [
-            "Left click a covered cell to dig it.",
-            "Right click a covered cell to plant a flag where you think a bomb is.",
-            "Left click a flagged cell to remove the flag.",
-        ],
-    },
-    {
-        title: "Numbers",
-        items: [
-            "A dug cell shows how many bombs touch it, diagonals included (1 to 8). A blank cell has no bombs around it.",
-            "Use the numbers to work out which neighbours are safe and which hide bombs.",
-        ],
-    },
-    {
-        title: "End of the game",
-        items: [
-            "Dig a bomb and it's game over.",
-            "Dig every safe cell and you win.",
-            "Each safe cell dug is worth 1 point.",
-            "Press \"replay\" to start a new board.",
-        ],
-    },
-];
+/**
+ * @typedef {Object} RulesSection
+ * @property {string} title The section title.
+ * @property {string[]} items The rules of the section, shown as a bulleted list.
+ */
 
+/**
+ * A round "?" button that opens a panel with the given rules.\
+ * The panel closes by clicking the ✕ button, clicking the blurred backdrop or pressing Escape.\
+ * Colors default to black and white and the button is not positioned: pass the style options to theme and place it.
+ *
+ * @example
+ * const rulesButton= new RulesButton([
+ *     { title: "Goal", items: ["Dig up every safe cell."] },
+ * ], {
+ *     style: { position: "fixed", top: "1rem", right: "1rem", backgroundColor: "var(--containers)" },
+ *     panelStyle: { backgroundColor: "var(--background)" },
+ * });
+ * document.body.appendChild(rulesButton.DOMElement);
+ */
 export default class RulesButton{
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement} The "?" button. */
     #DOMElement;
 
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement} The fullscreen backdrop holding the rules panel, attached to the body only while shown. */
     #maskElement;
 
-    constructor(options= {}){
+    /**
+     * @param {RulesSection[]} rules The rules shown inside the panel, one entry per section.
+     * @param {Object} [options]
+     * @param {Object} [options.style] CSS properties applied to the "?" button, including its position in the page.
+     * @param {Object} [options.panelStyle] CSS properties applied to the rules panel.
+     * @param {Object} [options.closeButtonStyle] CSS properties applied to the ✕ button inside the panel.
+     * @param {Object} [options.sectionTitleStyle] CSS properties applied to each section title of the rules.
+     */
+    constructor(rules, options= {}){
+        this.rules= rules;
         this.style= options.style ?? {};
         this.panelStyle= options.panelStyle ?? {};
         this.closeButtonStyle= options.closeButtonStyle ?? {};
@@ -50,15 +46,17 @@ export default class RulesButton{
         this.#init();
     }
 
+    /**
+     * Builds the "?" button, the backdrop and the rules panel, and registers the open/close listeners.
+     *
+     * @returns {void}
+     */
     #init(){
         this.#DOMElement= document.createElement("button");
         this.#DOMElement.innerText= "?";
         this.#DOMElement.title= "Rules";
         this.#DOMElement.setAttribute("aria-label", "Show the rules");
         css(this.#DOMElement, {
-            position: "fixed",
-            top: "1rem",
-            right: "1rem",
             width: "2.5rem",
             height: "2.5rem",
             borderRadius: "50%",
@@ -69,7 +67,6 @@ export default class RulesButton{
             fontSize: "1.25rem",
             fontWeight: "bold",
             cursor: "pointer",
-            zIndex: 200,
             ...this.style,
         });
         this.#DOMElement.addEventListener("click", ()=> this.toggle());
@@ -92,7 +89,7 @@ export default class RulesButton{
 
         const panel= document.createElement("div");
         panel.setAttribute("role", "dialog");
-        panel.setAttribute("aria-label", "Minesweeper rules");
+        panel.setAttribute("aria-label", "Rules");
         css(panel, {
             position: "relative",
             backgroundColor: "white",
@@ -129,7 +126,7 @@ export default class RulesButton{
         css(header, { marginTop: 0, textAlign: "center" });
         panel.appendChild(header);
 
-        RULES.forEach(section=> {
+        this.rules.forEach(section=> {
             const title= document.createElement("h3");
             title.innerText= section.title;
             css(title, {
@@ -157,16 +154,31 @@ export default class RulesButton{
         });
     }
 
+    /**
+     * Shows the rules panel.
+     *
+     * @returns {void}
+     */
     show(){
         document.body.appendChild(this.#maskElement);
         this.isShown= true;
     }
 
+    /**
+     * Hides the rules panel.
+     *
+     * @returns {void}
+     */
     hide(){
         this.#maskElement.remove();
         this.isShown= false;
     }
 
+    /**
+     * Shows the rules panel if hidden, hides it otherwise.
+     *
+     * @returns {void}
+     */
     toggle(){
         if (this.isShown){
             this.hide();
@@ -176,6 +188,11 @@ export default class RulesButton{
         }
     }
 
+    /**
+     * The "?" button, to be appended to the page.
+     *
+     * @returns {HTMLElement}
+     */
     get DOMElement(){
         return this.#DOMElement;
     }

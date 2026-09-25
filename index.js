@@ -5,6 +5,44 @@ import RulesButton from "./RulesButton.js";
 import { css } from "./utils.js";
 import { applyRandomPalette } from "./Palette.js";
 
+/**
+ * Rules shown inside the rules panel, one entry per section.
+ *
+ * @type {import("./RulesButton.js").RulesSection[]}
+ */
+const RULES= [
+    {
+        title: "Goal",
+        items: [
+            "Dig up every cell that does not hide a bomb.",
+        ],
+    },
+    {
+        title: "Controls",
+        items: [
+            "Left click a covered cell to dig it.",
+            "Right click a covered cell to plant a flag where you think a bomb is.",
+            "Left click a flagged cell to remove the flag.",
+        ],
+    },
+    {
+        title: "Numbers",
+        items: [
+            "A dug cell shows how many bombs touch it, diagonals included (1 to 8). A blank cell has no bombs around it.",
+            "Use the numbers to work out which neighbours are safe and which hide bombs.",
+        ],
+    },
+    {
+        title: "End of the game",
+        items: [
+            "Dig a bomb and it's game over.",
+            "Dig every safe cell and you win.",
+            "Each safe cell dug is worth 1 point.",
+            "Press \"replay\" to start a new board.",
+        ],
+    },
+];
+
 const main= ()=> {
     const gameBoard= new GameBoard(10, 10, {
         style: {
@@ -112,8 +150,12 @@ const main= ()=> {
         scoreBoardContainer.appendChild(scoreBoard.DOMElement);
     }
 
-    const rulesButton= new RulesButton({
+    const rulesButton= new RulesButton(RULES, {
         style: {
+            position: "fixed",
+            top: "1rem",
+            right: "1rem",
+            zIndex: 200,
             border: "2px solid var(--shadow)",
             backgroundColor: "var(--containers)",
             color: "var(--foreground)",
