@@ -9,12 +9,13 @@ const main= ()=> {
         style: {
             border: "1px solid black",
             borderCollapse: "collapse",
+            width: "70vw",
+            height: "70vw",
+            minWidth: "200px",
             margin: "0 auto",
             borderColor: "var(--shadow)"
         },
         cellStyle: {
-            height: "1cm",
-            width: "1cm",
             backgroundColor: "var(--containers)",
         },
         cellHoverStyle: {
@@ -31,7 +32,6 @@ const main= ()=> {
             color: "var(--foreground)",
         },
         bombDensity: .3,
-        // debugView: true,
     });
 
     const scoreBoard= new ScoreBoard(gameBoard.points, {
@@ -41,9 +41,7 @@ const main= ()=> {
         numbersStyle: {
             color: "var(--foreground)",
             backgroundColor: "var(--containers)",
-        }
-
-        // debug: true,
+        },
     });
 
     gameBoard.addEventListener(GameBoard.EVENTS.DIG, (event)=> {
@@ -91,7 +89,6 @@ const main= ()=> {
         replayButton.addEventListener("click", ()=> {
             replayButton.remove();
             gameBoard.reset();
-            // document.body.replaceChild(currentBoard, gameBoard.DOMElement);
         });
 
         document.body.appendChild(replayButton);

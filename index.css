@@ -10,6 +10,7 @@ body{
     font-family: consolas;
     background-color: var(--background);
     color: var(--foreground);
+    user-select: none;
 }
 
 #page-header{

@@ -321,6 +321,8 @@ export default class GameBoard extends EventTarget{
                         detail: event.detail,
                     }));
 
+                    this.#points= 0;
+
                     this.dispatchEvent(new CustomEvent(GameBoard.EVENTS.GAME_ENDED, {
                         detail: {
                             status: "game-over",
