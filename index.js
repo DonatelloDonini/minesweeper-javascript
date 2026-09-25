@@ -2,6 +2,7 @@ import GameBoard from "./GameBoard.js";
 import ModalMessage from "./ModalMessage.js";
 import ScoreBoard from "./ScoreBoard.js";
 import RulesButton from "./RulesButton.js";
+import SettingsButton from "./SettingsButton.js";
 import { css } from "./utils.js";
 import { applyRandomPalette } from "./Palette.js";
 
@@ -14,7 +15,8 @@ const RULES= [
     {
         title: "Goal",
         items: [
-            "Dig up every cell that does not hide a bomb.",
+            "Dig up every covered cell that does not hide a bomb.",
+            "The game starts with the safest cells already dug: only bombs and cells touching 3 or more bombs are covered.",
         ],
     },
     {
@@ -28,7 +30,7 @@ const RULES= [
     {
         title: "Numbers",
         items: [
-            "A dug cell shows how many bombs touch it, diagonals included (1 to 8). A blank cell has no bombs around it.",
+            "A cell shows how many bombs touch it, diagonals included (1 to 8). A blank cell has no bombs around it.",
             "Use the numbers to work out which neighbours are safe and which hide bombs.",
         ],
     },
@@ -36,15 +38,25 @@ const RULES= [
         title: "End of the game",
         items: [
             "Dig a bomb and it's game over.",
-            "Dig every safe cell and you win.",
+            "Dig every covered safe cell and you win.",
             "Each safe cell dug is worth 1 point.",
             "Press \"replay\" to start a new board.",
+            "Use the ⚙ button to change the field size: easy (10x10), medium (15x15) or hard (20x20). Changing it starts a new board.",
         ],
     },
 ];
 
+/**
+ * Available dimensions of the field, as number of cells per side.
+ */
+const FIELD_SIZES= [
+    { label: "Easy (10x10)", value: 10 },
+    { label: "Medium (15x15)", value: 15 },
+    { label: "Hard (20x20)", value: 20 },
+];
+
 const main= ()=> {
-    const gameBoard= new GameBoard(10, 10, {
+    const gameBoard= new GameBoard(FIELD_SIZES[0].value, FIELD_SIZES[0].value, {
         style: {
             border: "1px solid black",
             borderCollapse: "collapse",
@@ -107,9 +119,12 @@ const main= ()=> {
         victoryMessageModal.show();
     });
 
+    /** @type {HTMLElement | null} */
+    let replayButton= null;
+
     gameBoard.addEventListener(GameBoard.EVENTS.GAME_ENDED, ()=> {
         console.log("Game ended event caught...");
-        const replayButton= document.createElement("div");
+        replayButton= document.createElement("div");
         replayButton.innerText= "replay";
         // const icon=
 
@@ -128,6 +143,7 @@ const main= ()=> {
         replayButton.addEventListener("click", ()=> {
             replayButton.remove();
             gameBoard.reset();
+            scoreBoard.score= gameBoard.points;
         });
 
         document.body.appendChild(replayButton);
@@ -170,7 +186,48 @@ const main= ()=> {
         },
     });
 
+    const settingsButton= new SettingsButton([
+        {
+            title: "Field size",
+            choices: FIELD_SIZES,
+            selected: gameBoard.width,
+            onChange: (size)=> {
+                replayButton?.remove();
+                gameBoard.resize(size, size);
+                scoreBoard.score= gameBoard.points;
+            },
+        },
+    ], {
+        style: {
+            position: "fixed",
+            top: "1rem",
+            right: "4rem",
+            zIndex: 200,
+            border: "2px solid var(--shadow)",
+            backgroundColor: "var(--containers)",
+            color: "var(--foreground)",
+        },
+        panelStyle: {
+            backgroundColor: "var(--background)",
+            color: "var(--foreground)",
+            border: "2px solid var(--shadow)",
+        },
+        sectionTitleStyle: {
+            borderBottom: "2px solid var(--shadow)",
+        },
+        choiceStyle: {
+            border: "2px solid var(--shadow)",
+            backgroundColor: "var(--background)",
+            color: "var(--foreground)",
+        },
+        selectedChoiceStyle: {
+            backgroundColor: "var(--containers)",
+            color: "var(--foreground)",
+        },
+    });
+
     document.body.appendChild(rulesButton.DOMElement);
+    document.body.appendChild(settingsButton.DOMElement);
     document.body.appendChild(scoreBoardContainer);
     document.body.appendChild(gameBoard.DOMElement);
 };

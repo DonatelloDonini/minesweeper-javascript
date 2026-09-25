@@ -271,6 +271,10 @@ export default class GameBoard extends EventTarget{
         this.eventsManager= new AbortController();
         /** @type {GameCell[][]}*/
         this.table= [];
+        this.bombsInTheField= 0;
+        this.#points= 0;
+        this.#cellsToUncover= 0;
+        this.victoryStatus= false;
 
         for (let y=0; y<this.height; y++){
             const row= [];
@@ -467,5 +471,19 @@ export default class GameBoard extends EventTarget{
      */
     reset(){
         this.#init();
+    }
+
+    /**
+     * Changes the dimension of the field and generates a new level.
+     *
+     * @param {number} height The number of rows.
+     * @param {number} width The number of columns.
+     *
+     * @returns {void}
+     */
+    resize(height, width){
+        this.height= height;
+        this.width= width;
+        this.reset();
     }
 }
