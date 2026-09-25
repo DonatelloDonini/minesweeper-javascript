@@ -8,11 +8,14 @@
  */
 export const css= (element, style)=> {
   Object.keys(style).forEach((key) => {
-    if (isFunction(style[key])){
-      element.style[key] = style[key]();
+    const value = isFunction(style[key]) ? style[key]() : style[key];
+
+    // Custom properties (e.g. "--size") can only be set through setProperty
+    if (key.startsWith("--")){
+      element.style.setProperty(key, value);
     }
     else{
-      element.style[key] = style[key];
+      element.style[key] = value;
     }
   });
 };

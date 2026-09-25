@@ -31,6 +31,8 @@ class GameCell extends EventTarget{
 
         css(this.element, {
             position: "relative",
+            padding: 0,
+            overflow: "hidden",
             ...this.style,
         });
     }
@@ -362,7 +364,12 @@ export default class GameBoard extends EventTarget{
         else{
             this.#DOMElement= document.createElement("table");
         }
+        // Fixed layout keeps every column the same width regardless of the cells content,
+        // --rows and --columns let the style size the content relatively to the cells
         css(this.#DOMElement, {
+            tableLayout: "fixed",
+            "--rows": this.height,
+            "--columns": this.width,
             ...this.style,
         });
 
