@@ -8,7 +8,7 @@ import { css } from "./utils.js";
 
 /**
  * A round "?" button that opens a panel with the given rules.\
- * The panel closes by clicking the ✕ button, clicking the blurred backdrop or pressing Escape.\
+ * The panel closes by clicking the X button, clicking the blurred backdrop or pressing Escape.\
  * Colors default to black and white and the button is not positioned: pass the style options to theme and place it.
  *
  * @example
@@ -32,7 +32,7 @@ export default class RulesButton{
      * @param {Object} [options]
      * @param {Object} [options.style] CSS properties applied to the "?" button, including its position in the page.
      * @param {Object} [options.panelStyle] CSS properties applied to the rules panel.
-     * @param {Object} [options.closeButtonStyle] CSS properties applied to the ✕ button inside the panel.
+     * @param {Object} [options.closeButtonStyle] CSS properties applied to the X button inside the panel.
      * @param {Object} [options.sectionTitleStyle] CSS properties applied to each section title of the rules.
      */
     constructor(rules, options= {}){
@@ -105,7 +105,7 @@ export default class RulesButton{
         });
 
         const closeButton= document.createElement("button");
-        closeButton.innerText= "✕";
+        closeButton.innerText= "X";
         closeButton.setAttribute("aria-label", "Close the rules");
         css(closeButton, {
             position: "absolute",

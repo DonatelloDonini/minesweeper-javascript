@@ -15,11 +15,14 @@ import { css } from "./utils.js";
  */
 
 /**
- * A round "⚙" button that opens a panel with the given settings, each one being a group of exclusive choices.\
- * The panel closes by clicking the ✕ button, clicking the blurred backdrop or pressing Escape.\
+ * A round settings button that opens a panel with the given settings, each one being a group of exclusive choices.\
+ * The panel closes by clicking the X button, clicking the blurred backdrop or pressing Escape.\
  * Colors default to black and white and the button is not positioned: pass the style options to theme and place it.
  *
  * @example
+ * const settingsIcon= document.createElement("i");
+ * settingsIcon.className= "fi fi-sr-settings";
+ *
  * const settingsButton= new SettingsButton([
  *     {
  *         title: "Difficulty",
@@ -29,11 +32,12 @@ import { css } from "./utils.js";
  *     },
  * ], {
  *     style: { position: "fixed", top: "1rem", right: "1rem" },
+ *     icon: settingsIcon,
  * });
  * document.body.appendChild(settingsButton.DOMElement);
  */
 export default class SettingsButton{
-    /** @type {HTMLElement} The "⚙" button. */
+    /** @type {HTMLElement} The settings button. */
     #DOMElement;
 
     /** @type {HTMLElement} The fullscreen backdrop holding the settings panel, attached to the body only while shown. */
@@ -42,9 +46,10 @@ export default class SettingsButton{
     /**
      * @param {Setting[]} settings The settings shown inside the panel.
      * @param {Object} [options]
-     * @param {Object} [options.style] CSS properties applied to the "⚙" button, including its position in the page.
+     * @param {Object} [options.style] CSS properties applied to the settings button, including its position in the page.
+     * @param {HTMLElement} [options.icon] The element shown inside the settings button, "*" when not given.
      * @param {Object} [options.panelStyle] CSS properties applied to the settings panel.
-     * @param {Object} [options.closeButtonStyle] CSS properties applied to the ✕ button inside the panel.
+     * @param {Object} [options.closeButtonStyle] CSS properties applied to the X button inside the panel.
      * @param {Object} [options.sectionTitleStyle] CSS properties applied to each setting title.
      * @param {Object} [options.choiceStyle] CSS properties applied to each choice.
      * @param {Object} [options.selectedChoiceStyle] CSS properties applied on top of `choiceStyle` to the selected choice.
@@ -57,19 +62,25 @@ export default class SettingsButton{
         this.sectionTitleStyle= options.sectionTitleStyle ?? {};
         this.choiceStyle= options.choiceStyle ?? {};
         this.selectedChoiceStyle= options.selectedChoiceStyle ?? {};
+        this.icon= options.icon ?? null;
         this.isShown= false;
 
         this.#init();
     }
 
     /**
-     * Builds the "⚙" button, the backdrop and the settings panel, and registers the open/close listeners.
+     * Builds the settings button, the backdrop and the settings panel, and registers the open/close listeners.
      *
      * @returns {void}
      */
     #init(){
         this.#DOMElement= document.createElement("button");
-        this.#DOMElement.innerText= "⚙";
+        if (this.icon){
+            this.#DOMElement.appendChild(this.icon);
+        }
+        else {
+            this.#DOMElement.innerText= "*";
+        }
         this.#DOMElement.title= "Settings";
         this.#DOMElement.setAttribute("aria-label", "Show the settings");
         css(this.#DOMElement, {
@@ -120,7 +131,7 @@ export default class SettingsButton{
         });
 
         const closeButton= document.createElement("button");
-        closeButton.innerText= "✕";
+        closeButton.innerText= "X";
         closeButton.setAttribute("aria-label", "Close the settings");
         css(closeButton, {
             position: "absolute",
@@ -246,7 +257,7 @@ export default class SettingsButton{
     }
 
     /**
-     * The "⚙" button, to be appended to the page.
+     * The settings button, to be appended to the page.
      *
      * @returns {HTMLElement}
      */

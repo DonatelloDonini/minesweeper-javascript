@@ -41,7 +41,7 @@ const RULES= [
             "Dig every covered safe cell and you win.",
             "Each safe cell dug is worth 1 point.",
             "Press \"replay\" to start a new board.",
-            "Use the ⚙ button to change the field size: easy (10x10), medium (15x15) or hard (20x20). Changing it starts a new board.",
+            "Use the settings button to change the field size: easy (10x10), medium (15x15) or hard (20x20). Changing it starts a new board.",
         ],
     },
 ];
@@ -186,6 +186,14 @@ const main= ()=> {
         },
     });
 
+    const settingsIcon= document.createElement("i");
+    settingsIcon.className= "fi fi-sr-settings";
+    css(settingsIcon, {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    });
+
     const settingsButton= new SettingsButton([
         {
             title: "Field size",
@@ -203,6 +211,9 @@ const main= ()=> {
             top: "1rem",
             right: "4rem",
             zIndex: 200,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             border: "2px solid var(--shadow)",
             backgroundColor: "var(--containers)",
             color: "var(--foreground)",
@@ -224,6 +235,7 @@ const main= ()=> {
             backgroundColor: "var(--containers)",
             color: "var(--foreground)",
         },
+        icon: settingsIcon,
     });
 
     document.body.appendChild(rulesButton.DOMElement);
